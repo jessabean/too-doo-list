@@ -1,11 +1,11 @@
-"use strict()";
+'use strict()';
 
 var list      = document.getElementById('todo-items');
 var itemInput = document.getElementById('todo-add-new');
 
 var addToDo = function() {
   var text        = itemInput.value;
-  var item        = document.createElement("li");
+  var item        = document.createElement('li');
   var listLength  = list.children.length;
   var itemCheck   = '<input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" />';
   var itemStatus  = '<span class="todo__status">' + itemCheck + '</span>';
@@ -13,8 +13,8 @@ var addToDo = function() {
   var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon"><i class="icon icon--remove"></i></button></span>';
 
   item.innerHTML = itemStatus + itemText + itemAction;
-  item.id = "too-doo_" + (listLength + 1);
-  item.classList.add("todo__item");
+  item.id = 'too-doo_' + (listLength + 1);
+  item.classList.add('todo__item');
   list.appendChild(item);
   itemInput.value = '';
 
@@ -30,8 +30,8 @@ var completeToDo = function(event) {
   var check = event.target;
   var toDo = check.parentElement.parentElement;
 
-  if (toDo && toDo.matches("li")) {
-    toDo.classList.toggle("todo__item--complete");
+  if (toDo && toDo.matches('li')) {
+    toDo.classList.toggle('todo__item--complete');
     var toDoItems = list.innerHTML;
     localStorage.setItem('toDoItems', toDoItems);
   }
@@ -40,7 +40,7 @@ var completeToDo = function(event) {
 var validateToDo = function(event) {
   event.preventDefault();
   if(!itemInput.value) {
-    document.getElementById('error').innerHTML = "Please enter a value!";
+    document.getElementById('error').innerHTML = 'Please enter a value!';
   } else {
     addToDo();
   }
