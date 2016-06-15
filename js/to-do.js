@@ -20,6 +20,7 @@ var addToDoToDom = function(text) {
   item.innerHTML = itemText + itemAction;
   item.id = 'too-doo_' + (listLength + 1);
   item.classList.add('todo__item');
+  item.setAttribute('data-status', 'incomplete');
   list.appendChild(item);
   itemInput.value = '';
 };
@@ -46,9 +47,17 @@ var loadToDosFromStorage = function() {
 var completeToDo = function(event) {
   var check = event.target;
   var toDo = check.parentElement.parentElement;
+  var toDoStatus = toDo.getAttribute('data-status');
 
   if (toDo && toDo.matches('li')) {
     toDo.classList.toggle('todo__item--complete');
+    
+    if (toDoStatus === 'incomplete') {
+      toDo.setAttribute('data-status', 'complete');
+    } else {
+      toDo.setAttribute('data-status', 'incomplete');
+    }
+
     var toDoItems = list.innerHTML;
     localStorage.setItem('toDoItems', toDoItems);
   }

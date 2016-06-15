@@ -48,7 +48,7 @@ a {
   margin-top: 1rem;
 }
 
-.todo__item--complete {
+[data-status="complete"] {
   text-decoration: line-through;
   font-style: italic;
   color: rgba(0,0,0,0.5);
