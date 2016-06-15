@@ -7,7 +7,6 @@ var addToDo = function() {
   addToDoToDom();
   addToDoToStorage();
 
-  toDoHandlers();
 
   return false;
 };
