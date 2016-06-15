@@ -6,9 +6,6 @@ var itemInput = document.getElementById('todo-add-new');
 var addToDo = function() {
   addToDoToDom();
   addToDoToStorage();
-
-
-  return false;
 };
 
 var addToDoToDom = function() {
