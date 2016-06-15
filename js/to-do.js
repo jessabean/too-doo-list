@@ -4,6 +4,15 @@ var list      = document.getElementById('todo-items');
 var itemInput = document.getElementById('todo-add-new');
 
 var addToDo = function() {
+  addToDoToDom();
+  addToDoToStorage();
+
+  toDoHandlers();
+
+  return false;
+};
+
+var addToDoToDom = function() {
   var text        = itemInput.value;
   var item        = document.createElement('li');
   var listLength  = list.children.length;
@@ -17,13 +26,11 @@ var addToDo = function() {
   item.classList.add('todo__item');
   list.appendChild(item);
   itemInput.value = '';
+};
 
+var addToDoToStorage = function() {
   var toDoItems = list.innerHTML;
   localStorage.setItem('toDoItems', toDoItems);
-
-  toDoHandlers();
-
-  return false;
 };
 
 var completeToDo = function(event) {
