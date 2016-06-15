@@ -5,28 +5,31 @@ var itemInput = document.getElementById('todo-add-new');
 var toDoObjects = [];
 
 var addToDo = function() {
-  var text = itemInput.value;
+  var todo = {
+    text: itemInput.value,
+    status: 'incomplete'
+  };
 
-  addToDoToDom(text);
-  addToDoToStorage(text);
+  addToDoToDom(todo);
+  addToDoToStorage(todo);
 };
 
-var addToDoToDom = function(text) {
+var addToDoToDom = function(todo) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
-  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" /><span class="px1">' + text + '</span></label>';
+  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" /><span class="px1">' + todo.text + '</span></label>';
   var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon"><i class="icon icon--remove"></i></button></span>';
 
   item.innerHTML = itemText + itemAction;
   item.id = 'too-doo_' + (listLength + 1);
   item.classList.add('todo__item');
-  item.setAttribute('data-status', 'incomplete');
+  item.setAttribute('data-status', todo.status);
   list.appendChild(item);
   itemInput.value = '';
 };
 
-var addToDoToStorage = function(text) {
-  toDoObjects.push(text);
+var addToDoToStorage = function(todo) {
+  toDoObjects.push(todo);
   localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
 };
 
@@ -42,6 +45,7 @@ var loadToDosFromStorage = function() {
   }
 
   // remember completed state when loading to do items in dom
+  // make sure checkbox is checked for completed items
 };
 
 var completeToDo = function(event) {
