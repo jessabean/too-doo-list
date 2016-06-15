@@ -26,15 +26,21 @@ var addToDoToDom = function(text) {
 
 var addToDoToStorage = function(text) {
   toDoObjects.push(text);
-
-  localStorage.setItem('toDoObjects', toDoObjects);
+  localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
 };
 
 var loadToDosFromStorage = function() {
-  var toDoItems = localStorage.getItem('toDoItems');
-  if(toDoItems) {
-    list.innerHTML = toDoItems;
+  var str = localStorage.getItem('toDoObjects');
+  if (str) {
+    toDoObjects = JSON.parse(str);
   }
+
+  // construct dom html from toDoObjects
+  for (var i=0; i<toDoObjects.length; i++) {
+    addToDoToDom(toDoObjects[i]);
+  }
+
+  // remember completed state when loading to do items in dom
 };
 
 var completeToDo = function(event) {
