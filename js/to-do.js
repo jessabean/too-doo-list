@@ -2,6 +2,7 @@
 
 var list      = document.getElementById('todo-items');
 var itemInput = document.getElementById('todo-add-new');
+var toDoObjects = [];
 
 var addToDo = function() {
   var text = itemInput.value;
@@ -26,8 +27,11 @@ var addToDoToDom = function(text) {
 };
 
 var addToDoToStorage = function(text) {
-  var toDoItems = list.innerHTML;
-  localStorage.setItem('toDoItems', toDoItems);
+  toDoObjects.push(text);
+
+  localStorage.setItem('toDoObjects', toDoObjects);
+};
+
 };
 
 var completeToDo = function(event) {
