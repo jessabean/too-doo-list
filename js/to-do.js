@@ -32,6 +32,11 @@ var addToDoToStorage = function(text) {
   localStorage.setItem('toDoObjects', toDoObjects);
 };
 
+var loadToDosFromStorage = function() {
+  var toDoItems = localStorage.getItem('toDoItems');
+  if(toDoItems) {
+    list.innerHTML = toDoItems;
+  }
 };
 
 var completeToDo = function(event) {
@@ -72,10 +77,6 @@ itemInput.onkeydown = function(event) {
   }
 };
 
-if(localStorage.getItem('toDoItems')) {
-  list.innerHTML = localStorage.getItem('toDoItems');
-}
-
 var toDoHandlers = function() {
   list.addEventListener('change', completeToDo, false);
 };
@@ -83,3 +84,5 @@ var toDoHandlers = function() {
 window.onload = function(){
   toDoHandlers();
 };
+
+loadToDosFromStorage();
