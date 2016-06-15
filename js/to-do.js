@@ -4,12 +4,13 @@ var list      = document.getElementById('todo-items');
 var itemInput = document.getElementById('todo-add-new');
 
 var addToDo = function() {
-  addToDoToDom();
-  addToDoToStorage();
+  var text = itemInput.value;
+
+  addToDoToDom(text);
+  addToDoToStorage(text);
 };
 
-var addToDoToDom = function() {
-  var text        = itemInput.value;
+var addToDoToDom = function(text) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
   var itemCheck   = '<input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" />';
@@ -24,7 +25,7 @@ var addToDoToDom = function() {
   itemInput.value = '';
 };
 
-var addToDoToStorage = function() {
+var addToDoToStorage = function(text) {
   var toDoItems = list.innerHTML;
   localStorage.setItem('toDoItems', toDoItems);
 };
