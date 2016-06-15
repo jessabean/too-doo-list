@@ -14,12 +14,10 @@ var addToDo = function() {
 var addToDoToDom = function(text) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
-  var itemCheck   = '<input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" />';
-  var itemStatus  = '<span class="todo__status">' + itemCheck + '</span>';
-  var itemText    = '<span class="todo__text px1">' + text + '</span>';
+  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" /><span class="px1">' + text + '</span></label>';
   var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon"><i class="icon icon--remove"></i></button></span>';
 
-  item.innerHTML = itemStatus + itemText + itemAction;
+  item.innerHTML = itemText + itemAction;
   item.id = 'too-doo_' + (listLength + 1);
   item.classList.add('todo__item');
   list.appendChild(item);
