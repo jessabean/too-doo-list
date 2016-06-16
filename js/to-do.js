@@ -58,8 +58,7 @@ var completeToDo = function(event) {
   var toDoId = parseInt(toDo.getAttribute('data-id'));
 
   if (toDo && toDo.matches('li')) {
-    toDo.classList.toggle('todo__item--complete');
-    
+   
     if (toDoStatus === 'incomplete') {
       toDoStatus = 'complete';
     } else {
