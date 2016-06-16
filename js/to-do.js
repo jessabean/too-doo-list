@@ -2,39 +2,96 @@
 
 var list      = document.getElementById('todo-items');
 var itemInput = document.getElementById('todo-add-new');
+var toDoObjects = [];
 
 var addToDo = function() {
-  var text        = itemInput.value;
+  var todo = {
+    text: itemInput.value,
+    status: 'incomplete',
+    id: toDoObjects.length + 1
+  };
+
+  addToDoToDom(todo);
+  addToDoToStorage(todo);
+};
+
+var addToDoToDom = function(todo) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
-  var itemCheck   = '<input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" />';
-  var itemStatus  = '<span class="todo__status">' + itemCheck + '</span>';
-  var itemText    = '<span class="todo__text px1">' + text + '</span>';
-  var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon"><i class="icon icon--remove"></i></button></span>';
+  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + todo.id + '"';
+  if (todo.status === 'complete') {
+    itemText += 'checked=checked';
+  }
+  itemText += '/><span class="px1">' + todo.text + '</span></label>';
+  var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon" id="button-' + todo.id + '"><i class="icon icon--remove"></i></button></span>';
 
-  item.innerHTML = itemStatus + itemText + itemAction;
+  item.innerHTML = itemText + itemAction;
   item.id = 'too-doo_' + (listLength + 1);
   item.classList.add('todo__item');
+  item.setAttribute('data-status', todo.status);
+  item.setAttribute('data-id', todo.id);
   list.appendChild(item);
   itemInput.value = '';
+};
 
-  var toDoItems = list.innerHTML;
-  localStorage.setItem('toDoItems', toDoItems);
+var addToDoToStorage = function(todo) {
+  toDoObjects.push(todo);
+  localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
+};
 
-  toDoHandlers();
+var loadToDosFromStorage = function() {
+  var str = localStorage.getItem('toDoObjects');
+  if (str) {
+    toDoObjects = JSON.parse(str);
+  }
 
-  return false;
+  // construct dom html from toDoObjects
+  for (var i=0; i<toDoObjects.length; i++) {
+    addToDoToDom(toDoObjects[i]);
+  }
 };
 
 var completeToDo = function(event) {
   var check = event.target;
-  var toDo = check.parentElement.parentElement;
-
-  if (toDo && toDo.matches('li')) {
-    toDo.classList.toggle('todo__item--complete');
-    var toDoItems = list.innerHTML;
-    localStorage.setItem('toDoItems', toDoItems);
+  var toDo = check.closest('li');
+  var toDoStatus = toDo.getAttribute('data-status');
+  var toDoId = parseInt(toDo.getAttribute('data-id'));
+   
+  if (toDoStatus === 'incomplete') {
+    toDoStatus = 'complete';
+  } else {
+    toDoStatus = 'incomplete';
   }
+
+  toDo.setAttribute('data-status', toDoStatus);
+
+  for (var i = 0; i < toDoObjects.length; i++) {
+    if (toDoObjects[i].id === toDoId) {
+      toDoObjects[i].status = toDoStatus;
+    }
+  }
+
+  localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
+};
+
+var removeToDo = function(event) {
+  var button = event.target.closest('button');
+  if(!button) {
+    return false;
+  }
+  var toDo = button.closest('li');
+  var toDoId = parseInt(toDo.getAttribute('data-id'));
+
+  // 1. remove the li from the dom
+  list.removeChild(toDo);
+  // 2. remove the todo object with matching id from toDoObjects
+  for (var i = 0; i < toDoObjects.length; i++) {
+    if (toDoObjects[i].id === toDoId) {
+      toDoObjects.splice(i, 1);
+    }
+  }
+  // 3. set toDoObjects into localStorage as JSON
+  localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
 };
 
 var validateToDo = function(event) {
@@ -64,14 +121,13 @@ itemInput.onkeydown = function(event) {
   }
 };
 
-if(localStorage.getItem('toDoItems')) {
-  list.innerHTML = localStorage.getItem('toDoItems');
-}
-
 var toDoHandlers = function() {
   list.addEventListener('change', completeToDo, false);
+  list.addEventListener('click', removeToDo, false);
 };
 
 window.onload = function(){
   toDoHandlers();
 };
+
+loadToDosFromStorage();
