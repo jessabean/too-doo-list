@@ -18,12 +18,12 @@ var addToDo = function() {
 var addToDoToDom = function(todo) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
-  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (todo.id) + '"';
+  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + todo.id + '"';
   if (todo.status === 'complete') {
     itemText += 'checked=checked';
   }
   itemText += '/><span class="px1">' + todo.text + '</span></label>';
-  var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon"><i class="icon icon--remove"></i></button></span>';
+  var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon" id="button-' + todo.id + '"><i class="icon icon--remove"></i></button></span>';
 
   item.innerHTML = itemText + itemAction;
   item.id = 'too-doo_' + (listLength + 1);
@@ -77,6 +77,25 @@ var completeToDo = function(event) {
   }
 };
 
+var removeToDo = function(event) {
+  var button = event.target;
+  var toDo = button.parentElement.parentElement.parentElement;
+  var toDoId = parseInt(toDo.getAttribute('data-id'));
+
+  if (toDo && toDo.matches('li')) {
+    // 1. remove the li from the dom
+    list.removeChild(toDo);
+    // 2. remove the todo object with matching id from toDoObjects
+    for (var i = 0; i < toDoObjects.length; i++) {
+      if (toDoObjects[i].id === toDoId) {
+        toDoObjects.splice(i, 1);
+      }
+    }
+    // 3. set toDoObjects into localStorage as JSON
+    localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
+  }
+};
+
 var validateToDo = function(event) {
   event.preventDefault();
   if(!itemInput.value) {
@@ -106,6 +125,7 @@ itemInput.onkeydown = function(event) {
 
 var toDoHandlers = function() {
   list.addEventListener('change', completeToDo, false);
+  list.addEventListener('click', removeToDo, false);
 };
 
 window.onload = function(){
