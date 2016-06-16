@@ -53,47 +53,45 @@ var loadToDosFromStorage = function() {
 
 var completeToDo = function(event) {
   var check = event.target;
-  var toDo = check.parentElement.parentElement;
+  var toDo = check.closest('li');
   var toDoStatus = toDo.getAttribute('data-status');
   var toDoId = parseInt(toDo.getAttribute('data-id'));
-
-  if (toDo && toDo.matches('li')) {
    
-    if (toDoStatus === 'incomplete') {
-      toDoStatus = 'complete';
-    } else {
-      toDoStatus = 'incomplete';
-    }
-
-    toDo.setAttribute('data-status', toDoStatus);
-
-    for (var i = 0; i < toDoObjects.length; i++) {
-      if (toDoObjects[i].id === toDoId) {
-        toDoObjects[i].status = toDoStatus;
-      }
-    }
-
-    localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
+  if (toDoStatus === 'incomplete') {
+    toDoStatus = 'complete';
+  } else {
+    toDoStatus = 'incomplete';
   }
+
+  toDo.setAttribute('data-status', toDoStatus);
+
+  for (var i = 0; i < toDoObjects.length; i++) {
+    if (toDoObjects[i].id === toDoId) {
+      toDoObjects[i].status = toDoStatus;
+    }
+  }
+
+  localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
 };
 
 var removeToDo = function(event) {
-  var button = event.target;
-  var toDo = button.parentElement.parentElement.parentElement;
+  var button = event.target.closest('button');
+  if(!button) {
+    return false;
+  }
+  var toDo = button.closest('li');
   var toDoId = parseInt(toDo.getAttribute('data-id'));
 
-  if (toDo && toDo.matches('li')) {
-    // 1. remove the li from the dom
-    list.removeChild(toDo);
-    // 2. remove the todo object with matching id from toDoObjects
-    for (var i = 0; i < toDoObjects.length; i++) {
-      if (toDoObjects[i].id === toDoId) {
-        toDoObjects.splice(i, 1);
-      }
+  // 1. remove the li from the dom
+  list.removeChild(toDo);
+  // 2. remove the todo object with matching id from toDoObjects
+  for (var i = 0; i < toDoObjects.length; i++) {
+    if (toDoObjects[i].id === toDoId) {
+      toDoObjects.splice(i, 1);
     }
-    // 3. set toDoObjects into localStorage as JSON
-    localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
   }
+  // 3. set toDoObjects into localStorage as JSON
+  localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
 };
 
 var validateToDo = function(event) {
