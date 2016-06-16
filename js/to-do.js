@@ -7,7 +7,8 @@ var toDoObjects = [];
 var addToDo = function() {
   var todo = {
     text: itemInput.value,
-    status: 'incomplete'
+    status: 'incomplete',
+    id: toDoObjects.length + 1
   };
 
   addToDoToDom(todo);
@@ -17,7 +18,7 @@ var addToDo = function() {
 var addToDoToDom = function(todo) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
-  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (listLength + 1) + '"';
+  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (todo.id) + '"';
   if (todo.status === 'complete') {
     itemText += 'checked=checked';
   }
@@ -28,7 +29,7 @@ var addToDoToDom = function(todo) {
   item.id = 'too-doo_' + (listLength + 1);
   item.classList.add('todo__item');
   item.setAttribute('data-status', todo.status);
-  item.setAttribute('data-text', todo.text);
+  item.setAttribute('data-id', todo.id);
   list.appendChild(item);
   itemInput.value = '';
 };
@@ -48,16 +49,13 @@ var loadToDosFromStorage = function() {
   for (var i=0; i<toDoObjects.length; i++) {
     addToDoToDom(toDoObjects[i]);
   }
-
-  // remember completed state when loading to do items in dom
-  // make sure checkbox is checked for completed items
 };
 
 var completeToDo = function(event) {
   var check = event.target;
   var toDo = check.parentElement.parentElement;
   var toDoStatus = toDo.getAttribute('data-status');
-  var toDoText = toDo.getAttribute('data-text');
+  var toDoId = parseInt(toDo.getAttribute('data-id'));
 
   if (toDo && toDo.matches('li')) {
     toDo.classList.toggle('todo__item--complete');
@@ -71,7 +69,7 @@ var completeToDo = function(event) {
     toDo.setAttribute('data-status', toDoStatus);
 
     for (var i = 0; i < toDoObjects.length; i++) {
-      if (toDoObjects[i].text === toDoText) {
+      if (toDoObjects[i].id === toDoId) {
         toDoObjects[i].status = toDoStatus;
       }
     }
