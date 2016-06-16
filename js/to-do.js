@@ -24,6 +24,7 @@ var addToDoToDom = function(todo) {
   item.id = 'too-doo_' + (listLength + 1);
   item.classList.add('todo__item');
   item.setAttribute('data-status', todo.status);
+  item.setAttribute('data-text', todo.text);
   list.appendChild(item);
   itemInput.value = '';
 };
@@ -52,18 +53,26 @@ var completeToDo = function(event) {
   var check = event.target;
   var toDo = check.parentElement.parentElement;
   var toDoStatus = toDo.getAttribute('data-status');
+  var toDoText = toDo.getAttribute('data-text');
 
   if (toDo && toDo.matches('li')) {
     toDo.classList.toggle('todo__item--complete');
     
     if (toDoStatus === 'incomplete') {
-      toDo.setAttribute('data-status', 'complete');
+      toDoStatus = 'complete';
     } else {
-      toDo.setAttribute('data-status', 'incomplete');
+      toDoStatus = 'incomplete';
     }
 
-    var toDoItems = list.innerHTML;
-    localStorage.setItem('toDoItems', toDoItems);
+    toDo.setAttribute('data-status', toDoStatus);
+
+    for (var i = 0; i < toDoObjects.length; i++) {
+      if (toDoObjects[i].text === toDoText) {
+        toDoObjects[i].status = toDoStatus;
+      }
+    }
+
+    localStorage.setItem('toDoObjects', JSON.stringify(toDoObjects));
   }
 };
 
