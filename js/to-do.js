@@ -17,7 +17,11 @@ var addToDo = function() {
 var addToDoToDom = function(todo) {
   var item        = document.createElement('li');
   var listLength  = list.children.length;
-  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (listLength + 1) + '" /><span class="px1">' + todo.text + '</span></label>';
+  var itemText    = '<label class="todo__text"><input type="checkbox" id="too-doo-check_' + (listLength + 1) + '"';
+  if (todo.status === 'complete') {
+    itemText += 'checked=checked';
+  }
+  itemText += '/><span class="px1">' + todo.text + '</span></label>';
   var itemAction  = '<span class="todo__remove"><button type="button" class="btn btn--icon"><i class="icon icon--remove"></i></button></span>';
 
   item.innerHTML = itemText + itemAction;
