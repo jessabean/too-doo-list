@@ -8,7 +8,7 @@ var addToDo = function() {
   var todo = {
     text: itemInput.value,
     status: 'incomplete',
-    id: toDoObjects.length + 1
+    id: generateId()
   };
 
   addToDoToDom(todo);
@@ -55,7 +55,7 @@ var completeToDo = function(event) {
   var check = event.target;
   var toDo = check.closest('li');
   var toDoStatus = toDo.getAttribute('data-status');
-  var toDoId = parseInt(toDo.getAttribute('data-id'));
+  var toDoId = toDo.getAttribute('data-id');
    
   if (toDoStatus === 'incomplete') {
     toDoStatus = 'complete';
@@ -80,7 +80,7 @@ var removeToDo = function(event) {
     return false;
   }
   var toDo = button.closest('li');
-  var toDoId = parseInt(toDo.getAttribute('data-id'));
+  var toDoId = toDo.getAttribute('data-id');
 
   // 1. remove the li from the dom
   list.removeChild(toDo);
@@ -109,6 +109,18 @@ var clearToDos = function(event) {
   location.reload();
   return false;
 };
+
+var generateId = function() {
+  var charSet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var charSetSize = charSet.length;
+  var charCount = 8;
+  var id = '';
+    for (var i = 1; i <= charCount; i++) {
+        var randPos = Math.floor(Math.random() * charSetSize);
+        id += charSet[randPos];
+    }
+    return id;
+}
 
 document.getElementById('clear-todos').addEventListener('click', clearToDos, false);
 
